@@ -23,22 +23,35 @@ Three moving parts:
   in one color. Bold renders brighter; reverse-video is honored so TUIs stay
   readable.
 - **Scanlines** — a dithered horizontal-line overlay across the "glass".
-- **Blinking block cursor** and **subtle brightness flicker**.
+- **Solid block cursor** that blinks just once every 15 minutes (no flashing).
 - **Monitor bezel** with a power LED and a phosphor-mode status readout.
 
-## Run it
+## Requirements
+
+- **Python 3** with **Tkinter** (the `tkinter` module).
+  - macOS: the system `python3` already includes it — nothing to install.
+  - Debian/Ubuntu: `sudo apt install python3-tk`
+  - Fedora: `sudo dnf install python3-tkinter`
+- A desktop session — it opens a GUI window (won't run over plain SSH).
+- Unix only (macOS / Linux). It uses `pty.fork`, so it won't run on Windows.
+
+`pyte` is installed automatically by `run.sh`; you don't need it beforehand.
+
+## Get it & run it
 
 ```bash
-cd ~/pyterm
+git clone https://github.com/xod442/myterm.git
+cd myterm
 ./run.sh
 ```
 
-`run.sh` creates a virtualenv and installs `pyte` the first time, then launches
-the app. (Run it from a desktop session — it opens a GUI window.)
+`run.sh` creates a virtualenv, installs `pyte` the first time, then launches the
+app. Every run after that just starts it.
 
-Or manually:
+### Manual install (if you'd rather not use run.sh)
 
 ```bash
+cd myterm
 python3 -m venv .venv
 ./.venv/bin/pip install -r requirements.txt
 ./.venv/bin/python pyterm.py
@@ -59,7 +72,8 @@ Open `pyterm.py` and edit the constants near the top:
 - `DEFAULT_COLS` / `DEFAULT_ROWS` — startup grid size
 - `THEMES` — add or recolor phosphor palettes
 - `FONT_FAMILY` / `FONT_SIZE` — the glow font
-- `BLINK_MS`, `FLICKER_MS` — cursor and flicker timing
+- `BLINK_INTERVAL_MS` — how long the cursor stays solid between blinks (default 15 min)
+- `BLINK_OFF_MS` — how long the single blink stays dark
 - scanline spacing lives in `_draw_scanlines` (the `range(0, h, 3)` step)
 
 ## Notes
